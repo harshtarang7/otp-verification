@@ -6,6 +6,9 @@
     "outDir": "dist",
     "esModuleInterop": true,
     "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false,
     "strict": true,
     "skipLibCheck": true
   },
