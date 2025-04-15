@@ -1,7 +1,8 @@
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 import * as bcyrpt from 'bcrypt';
 
-export class userEntity{
+@Entity("users")
+export class UserEntity{
     @PrimaryGeneratedColumn('increment')
     id:number;
 
