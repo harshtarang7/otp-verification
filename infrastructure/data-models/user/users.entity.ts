@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, PrimaryGeneratedColumn } from "typeorm";
+import * as bcyrpt from 'bcrypt';
 
 export class userEntity{
     @PrimaryGeneratedColumn('increment')
@@ -9,6 +10,9 @@ export class userEntity{
 
     @Column({type:'varchar'})
     email:string;
+
+    @Column({type:'varchar'})
+    password:string;
 
     @Column({type:'date'})
     dob:string;
@@ -24,4 +28,18 @@ export class userEntity{
 
     @CreateDateColumn({type:'timestamp'})
     updated_at:string;
+
+    // hashing password before inserting and updating 
+    @BeforeInsert()
+    @BeforeUpdate()
+    async hashPassword(){
+        if(this.password){
+            const salt = await bcyrpt.genSalt(10);
+            this.password = await bcyrpt.hash(this.password, salt);
+        }
+    }
+
+    async validatePassword(password:string):Promise<boolean>{
+        return bcyrpt.compare(password,this.password);
+    }
 }
