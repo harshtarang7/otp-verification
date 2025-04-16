@@ -3,6 +3,8 @@ import { LoginService } from "./login.service";
 import { UserEntity } from "../../data-models/user/users.entity";
 import { SignUpDto } from "./dto/request/sign-up.request.dto";
 import { Request, Response } from 'express';
+import { LoginReponseDto } from "./dto/response/login.response.dto";
+import { LoginRequestDto } from "./dto/request/login.dto";
 
 export class LoginController{
     private readonly loginService:LoginService;
@@ -22,6 +24,22 @@ export class LoginController{
             console.error(error)
             res.status(400).json({
                 message: error.message || 'Failed to register user'
+            });
+        }
+    }
+
+    async login(req:Request,res:Response):Promise<void>{
+        try {
+            const loginDto:LoginRequestDto = req.body;
+            const result = await this.loginService.login(loginDto);
+            res.status(201).json({
+                message:'login Successfull',
+                ...result
+            })
+        } catch (error) {
+            console.error(error)
+            res.status(400).json({
+                message: error.message || 'Failed to login'
             });
         }
     }

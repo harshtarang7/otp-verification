@@ -8,6 +8,7 @@ export function initAuthRouter(ds: DataSource): Router {
     const loginController = new LoginController(ds);
 
     router.post('/signup', loginController.signUp.bind(loginController));
+    router.post('/login', loginController.login.bind(loginController));
 
     return router;
 }

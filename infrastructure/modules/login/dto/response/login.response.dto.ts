@@ -1,5 +1,6 @@
 import { UserEntity } from "../../../../data-models/user/users.entity";
 
-export class LoginReponseDto extends UserEntity{
+export class LoginReponseDto{
+    user:UserEntity
     token:string
 }
