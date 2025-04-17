@@ -3,6 +3,7 @@ import { UserEntity } from "../../../data-models/user/users.entity";
 import { userOtpEntity } from "../../../data-models/user-otp/user-otp.entity";
 import nodemailer from "nodemailer";
 import * as bcrypt from "bcrypt";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
 
 export class OtpService {
   private readonly dataSource: DataSource;
@@ -16,17 +17,26 @@ export class OtpService {
     this.dataSource = dataSource;
     this.userRepository = dataSource.getRepository(UserEntity);
     this.otpRepository = dataSource.getRepository(userOtpEntity);
+    
 
     this.transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT),
-      secure: Boolean(process.env.SMTP_SECURE),
+      secure: false, 
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD,
       },
-    });
+      requireTLS: true,
+      tls:{
+        requireTLS: true,
+        rejectUnauthorized:false,
+        minVersion: 'TLSv1.2' 
+      }
+    }as SMTPTransport.Options);
   }
+
+  
 
   private generateOtp(): string {
     return Math.floor(100000 + Math.random() * 900000).toString();

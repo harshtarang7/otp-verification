@@ -26,7 +26,7 @@ export class OtpController {
       } else {
         res.status(500).json({
           message: "Invalid credentials or failed to send OTP",
-        });
+        }); 
       }
     } catch (error) {
       console.error("Error in sendOtp controller:", error);
