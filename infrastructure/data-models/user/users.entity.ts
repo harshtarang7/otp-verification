@@ -1,5 +1,6 @@
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import * as bcyrpt from 'bcrypt';
+import { userOtpEntity } from "../user-otp/user-otp.entity";
 
 @Entity("users")
 export class UserEntity{
@@ -29,6 +30,9 @@ export class UserEntity{
 
     @CreateDateColumn({type:'timestamp'})
     updated_at:string;
+
+    @OneToMany(()=>userOtpEntity,(otp)=>otp.user)
+    userOtp:userOtpEntity[];
 
     // hashing password before inserting and updating 
     @BeforeInsert()

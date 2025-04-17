@@ -1,11 +1,13 @@
-import { Column, CreateDateColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { UserEntity } from "../user/users.entity";
 
+@Entity('user_otp_verification')
 export class userOtpEntity{
     @PrimaryGeneratedColumn('increment')
     id:number;
 
     @Column({type:'int4'})
-    name:number;
+    user_id:number;
 
     @Column({type:'varchar'})
     otp:string;
@@ -14,8 +16,15 @@ export class userOtpEntity{
     is_verified:boolean;
 
     @CreateDateColumn({type:'timestamp'})
-    created_at:string;
+    created_at:Date;
 
-    @CreateDateColumn({type:'timestamp'})
-    updated_at:string;
+    @UpdateDateColumn({type:'timestamp'})
+    updated_at:Date;
+
+    @Column({type:'timestamp'})
+    expires_at:Date;
+
+    @ManyToOne(()=>UserEntity,(user)=>user.userOtp)
+    @JoinColumn({name:'user_id'})
+    user:UserEntity
 }

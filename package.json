@@ -6,7 +6,7 @@
   "scripts": {
     "start": "tsx watch index.ts",
     "dev": "nodemon --watch './**/*.ts' --exec tsx index.ts",
-   "dev:ts": "nodemon --watch './**/*.ts' --ext ts --exec tsx index.ts"
+    "dev:ts": "nodemon --watch './**/*.ts' --ext ts --exec tsx index.ts"
   },
   "keywords": [],
   "author": "",
@@ -15,9 +15,11 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "class-validator": "^0.14.1",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^6.10.1",
     "pg": "^8.14.1",
     "typeorm": "^0.3.22"
   },
@@ -26,6 +28,7 @@
     "@types/express": "^5.0.1",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^22.14.0",
+    "@types/nodemailer": "^6.4.17",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.3",
