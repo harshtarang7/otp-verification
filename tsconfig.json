@@ -11,7 +11,8 @@
     "strictPropertyInitialization": false,
     "strict": true,
     "useUnknownInCatchVariables":false,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "noImplicitAny": false
   },
   "include": ["./**/*.ts"],
   "exclude": ["node_modules"]
