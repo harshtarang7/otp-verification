@@ -38,13 +38,18 @@ export class OtpService {
     return Math.floor(100000 + Math.random() * 900000);
   }
 
-  async sendOtp(email: string, password: string): Promise<boolean> {
+  async sendOtp(email: string, password: string): Promise<ApiResponse<boolean>> {
     try {
       const user = await this.userRepository.findOne({ where: { email } });
 
       if (!user) {
         throw new Error("User not found");
       }
+
+      if(user.verified===true){
+        throw new Error("User is already verified")
+      }
+
       const isPasswordValid = await bcrypt.compare(password, user.password);
 
       if (!isPasswordValid) {
@@ -89,10 +94,9 @@ export class OtpService {
           </div>
         `,
       });
-      return true;
+      return SuccessResponse(true,'OTP sent Successfully');
     } catch (error) {
-      console.error("Error sending OTP:", error);
-      return false;
+      throw error;
     }
   }
 
@@ -108,6 +112,10 @@ export class OtpService {
         throw new Error("User not found");
       }
 
+      if(user.verified===true){
+        throw new Error("User is already verified")
+      }
+
       const isPasswordValid = await bcrypt.compare(password, user.password);
 
       if (!isPasswordValid) {
@@ -117,7 +125,6 @@ export class OtpService {
       const otpRecord = await this.otpRepository.findOne({
         where: { user_id: user.id },
       });
-      console.log(otpRecord)
 
       if (!otpRecord) {
         throw new Error("No OTP found for this user");
@@ -141,7 +148,6 @@ export class OtpService {
 
       return SuccessResponse(true,'OTP verified') 
     } catch (error) {
-      console.error("Error verifying OTP:", error);
       throw error
     }
   }

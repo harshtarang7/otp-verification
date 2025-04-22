@@ -1,7 +1,7 @@
 import { DataSource } from "typeorm";
 import { OtpService } from "./otp.service";
 import { Request, Response } from "express";
-import { ErrorResponse } from "../../response-manager/response.helper";
+import { ErrorResponse, SuccessResponse } from "../../response-manager/response.helper";
 export class OtpController {
   private readonly otpService: OtpService;
   constructor(dataSource: DataSource) {
@@ -13,24 +13,18 @@ export class OtpController {
       const { email, password } = req.body;
 
       if (!email || !password) {
-        res.status(400).json({
-          message: "email and password are required",
-        });
+        res.status(400).json(ErrorResponse('Email and Passwords are required'));
       }
 
       const isSent = await this.otpService.sendOtp(email, password);
 
       if (isSent) {
-        res.status(200).json({
-          message: "OTP sent successfully",
-        });
+        res.status(200).json(SuccessResponse('OTP sent successfully'));
       } else {
-        res.status(500).json({
-          message: "Invalid credentials or failed to send OTP",
-        }); 
+        res.status(500).json(ErrorResponse('Invalid credentials or failed to send OTP')); 
       }
+     
     } catch (error) {
-      console.error("Error in sendOtp controller:", error);
       res.status(500).json({
         success: false,
         message: error.message,
@@ -42,7 +36,7 @@ export class OtpController {
     try {
       const { email, password, otp } = req.body;
 
-      if (!email || !password) {
+      if (!email ) {
         res.status(400).json(ErrorResponse('email is required'));
       }
       
@@ -57,12 +51,11 @@ export class OtpController {
       const isVerified = await this.otpService.verifyOtp(email, password, otp);
 
       if (isVerified.status) {
-        res.status(200).json(ErrorResponse('OTP verified successfully'));
+        res.status(200).json(SuccessResponse('OTP verified successfully'));
       } else {
         res.status(410).json(ErrorResponse('OTP invalid or expired')); 
       }
     } catch (error) {
-      console.error("Error in verifyotp controller:", error);
       res.status(500).json(ErrorResponse(error.message,`Internal server error: ${error.message}`));
     }
   }
