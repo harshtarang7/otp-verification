@@ -9,8 +9,8 @@ export class userOtpEntity{
     @Column({type:'int4'})
     user_id:number;
 
-    @Column({type:'varchar'})
-    otp:string;
+    @Column({type:'int4'})
+    otp:number;
 
     @Column({type:'bool'})
     is_verified:boolean;

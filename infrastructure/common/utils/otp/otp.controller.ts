@@ -1,6 +1,7 @@
 import { DataSource } from "typeorm";
 import { OtpService } from "./otp.service";
 import { Request, Response } from "express";
+import { ErrorResponse } from "../../response-manager/response.helper";
 export class OtpController {
   private readonly otpService: OtpService;
   constructor(dataSource: DataSource) {
@@ -34,6 +35,35 @@ export class OtpController {
         success: false,
         message: error.message,
       });
+    }
+  }
+
+  async verifyOtp(req: Request, res: Response): Promise<void> {
+    try {
+      const { email, password, otp } = req.body;
+
+      if (!email || !password) {
+        res.status(400).json(ErrorResponse('email is required'));
+      }
+      
+      if (!password) {
+        res.status(400).json(ErrorResponse('password is required'));
+      }
+
+      if (!otp) {
+        res.status(400).json(ErrorResponse('otp is required'));
+      }
+
+      const isVerified = await this.otpService.verifyOtp(email, password, otp);
+
+      if (isVerified.status) {
+        res.status(200).json(ErrorResponse('OTP verified successfully'));
+      } else {
+        res.status(410).json(ErrorResponse('OTP invalid or expired')); 
+      }
+    } catch (error) {
+      console.error("Error in verifyotp controller:", error);
+      res.status(500).json(ErrorResponse(error.message,`Internal server error: ${error.message}`));
     }
   }
 }

@@ -4,6 +4,7 @@ import { userOtpEntity } from "../../../data-models/user-otp/user-otp.entity";
 import nodemailer from "nodemailer";
 import * as bcrypt from "bcrypt";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
+import { ApiResponse, ErrorResponse, SuccessResponse } from "../../response-manager/response.helper";
 
 export class OtpService {
   private readonly dataSource: DataSource;
@@ -11,35 +12,30 @@ export class OtpService {
   private otpRepository: Repository<userOtpEntity>;
   private transporter: nodemailer.Transporter;
 
-  constructor(
-    dataSource: DataSource,
-  ) {
+  constructor(dataSource: DataSource) {
     this.dataSource = dataSource;
     this.userRepository = dataSource.getRepository(UserEntity);
     this.otpRepository = dataSource.getRepository(userOtpEntity);
-    
 
     this.transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT),
-      secure: false, 
+      secure: false,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD,
       },
       requireTLS: true,
-      tls:{
+      tls: {
         requireTLS: true,
-        rejectUnauthorized:false,
-        minVersion: 'TLSv1.2' 
-      }
-    }as SMTPTransport.Options);
+        rejectUnauthorized: false,
+        minVersion: "TLSv1.2",
+      },
+    } as SMTPTransport.Options);
   }
 
-  
-
-  private generateOtp(): string {
-    return Math.floor(100000 + Math.random() * 900000).toString();
+  private generateOtp(): number {
+    return Math.floor(100000 + Math.random() * 900000);
   }
 
   async sendOtp(email: string, password: string): Promise<boolean> {
@@ -100,11 +96,28 @@ export class OtpService {
     }
   }
 
-  async verifyOtp(userId: number, otpToVerify: string): Promise<boolean> {
+  async verifyOtp(
+    email: string,
+    password: string,
+    otpToVerify: number
+  ): Promise<ApiResponse<boolean>> {
     try {
+      const user = await this.userRepository.findOne({ where: { email } });
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+
+      if (!isPasswordValid) {
+        throw new Error("Invalid Password");
+      }
+
       const otpRecord = await this.otpRepository.findOne({
-        where: { user_id: userId },
+        where: { user_id: user.id },
       });
+      console.log(otpRecord)
 
       if (!otpRecord) {
         throw new Error("No OTP found for this user");
@@ -122,15 +135,14 @@ export class OtpService {
       await this.otpRepository.save(otpRecord);
 
       //updating user verified status
-      const user = await this.userRepository.findOne({ where: { id: userId } });
-      if (user) {
-        user.verified = true;
-        await this.userRepository.save(user);
-      }
-      return true;
+
+      user.verified = true;
+      await this.userRepository.save(user);
+
+      return SuccessResponse(true,'OTP verified') 
     } catch (error) {
       console.error("Error verifying OTP:", error);
-      return false;
+      throw error
     }
   }
 }
