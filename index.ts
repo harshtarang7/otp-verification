@@ -8,11 +8,16 @@ import passport from 'passport';
 import './auth/google';
 import './auth/github';
 import thirdPartyAuth from './routes/external.login.routes.js'
+import cors from 'cors'
 
 const app = express();
 const dataSource = await initialiseDatabase();
 
 app.use(express.json());
+app.use(cors({
+  origin: 'http://localhost:3000', 
+  credentials: true
+}))
 app.use(
   session({
     secret:'my-secret',
@@ -30,7 +35,7 @@ app.use('/external-auth',thirdPartyAuth)
 app.use('/auth',initAuthRouter(dataSource))
 app.use('/otp',initOtpRouter(dataSource))
 
-const port = 3000
+const port = 3001
 
 app.listen(port, async() => {
   console.log('Server running on',port);
