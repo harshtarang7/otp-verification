@@ -5,8 +5,8 @@ import { initAuthRouter } from './routes/auth.routes.js';
 import { initOtpRouter } from './routes/otp.routes.js';
 import session from 'express-session';
 import passport from 'passport';
-import './auth/google';
-import './auth/github';
+import './infrastructure/modules/auth/google.js';
+import './infrastructure/modules/auth/github.js';
 import thirdPartyAuth from './routes/external.login.routes.js'
 import cors from 'cors'
 

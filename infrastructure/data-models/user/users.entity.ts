@@ -1,5 +1,5 @@
 import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import * as bcyrpt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 import { userOtpEntity } from "../user-otp/user-otp.entity";
 
 @Entity("users")
@@ -39,12 +39,16 @@ export class UserEntity{
     @BeforeUpdate()
     async hashPassword(){
         if(this.password){
-            const salt = await bcyrpt.genSalt(10);
-            this.password = await bcyrpt.hash(this.password, salt);
+            const salt = await bcrypt.genSalt(10);
+            this.password = await bcrypt.hash(this.password, salt);
         }
     }
 
     async validatePassword(password:string):Promise<boolean>{
-        return bcyrpt.compare(password,this.password);
+        console.log("Inside validatePassword - Input:", password);
+        console.log("Inside validatePassword - Stored:", this.password);
+        const result = await bcrypt.compare(password, this.password);
+        console.log("Inside validatePassword - Result:", result);
+        return result;
     }
 }

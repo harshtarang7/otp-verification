@@ -1,23 +1,49 @@
-"use client"
-import { Box, Card, Divider, FormControl, Grid, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
+"use client";
+import {
+  Box,
+  Button,
+  Card,
+  Divider,
+  FormControl,
+  Grid,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Image from "next/image";
+import googleIcon from "../../asset/googleIcon.png";
+import github from "../../asset/github.png";
+import { login } from "@/services/auth.service";
 
 export default function Home() {
-
-  const [name,setName] = useState('')
-  const [email,setEmail] = useState('')
-  const [password,setPassword] = useState('')
-  const [showPassword,setShowPassword] = useState(false)
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     event.preventDefault();
   };
+
+  const handleLogin =async () =>{
+    try {
+      const res = await login({email,password})
+      console.log('res',res)
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <Grid
       sx={{
@@ -28,84 +54,70 @@ export default function Home() {
       <Card
         sx={{
           width: "60%",
-          height: "70%",
+          height: "65%",
           top: "50%",
           left: "50%",
           position: "relative",
           transform: "translate(-50%,-50%)",
           borderRadius: 0,
           display: "flex",
-          border:'2px solid black',
-          boxShadow:'8px 6px 0px 0px black'
+          border: "2px solid black",
+          boxShadow: "8px 6px 0px 0px black",
         }}
       >
-       
-        <Card sx={{ width: "50%" , background: " linear-gradient(rgb(255, 229, 187),rgb(255, 218, 158))",}} >
+        <Card sx={{ width: "50%", background: "rgb(255, 231, 182)" }}>
           <Box padding={2} display={"flex"} flexDirection={"column"}>
-            <Typography py={1} textAlign={"center"} fontSize={21} fontWeight={700}>
+            <Typography
+              py={1}
+              textAlign={"center"}
+              fontSize={21}
+              fontWeight={700}
+            >
               OTPEEEE
             </Typography>
-            <Typography textAlign={'center'}>Create an Account</Typography>
+            <Typography textAlign={"center"}>Login</Typography>
 
-            <Card style={{
-              border:'1px solid black'
-            }}>
-              <FormControl sx={{padding:2}}>
-                <Typography>Name</Typography>
-                <TextField 
-                type="text"
-                value={name}
-                size="small"
-                placeholder="Your name here..."
-                onChange={(e)=>setName(e.target.value)}
-                sx={{
-                  backgroundColor:'#f0f0f0',
-                  my:1,
-                  border:'1px solid black',
-                 boxShadow:'4px 2px 0px 0px black'
-                }}
-                
-                />
-              </FormControl>
-              <Divider sx={{backgroundColor:'black'}}/>
-              <FormControl sx={{padding:2}}>
-                <Typography>Email</Typography>
-                <TextField 
+            <FormControl sx={{ padding: 1 }}>
+              <Typography>Email</Typography>
+              <TextField
                 type="email"
                 value={email}
                 size="small"
                 placeholder="Your email here.."
-                onChange={(e)=>setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 sx={{
-                  backgroundColor:'#f0f0f0',
-                  my:1,
-                  border:'1px solid black',
-                 boxShadow:'4px 2px 0px 0px black'
+                  backgroundColor: "#fff",
+                  my: 1,
+                  border: "1px solid black",
+                  boxShadow: "4px 2px 0px 0px black",
                 }}
-                
-                />
-              </FormControl>
+              />
+            </FormControl>
 
-              <Divider sx={{backgroundColor:'black'}}/>
-              <FormControl sx={{padding:2}}>
-                <Typography>Password</Typography>
-                <TextField 
-                type={showPassword ? "text" : "password"} 
+            {/* <Divider sx={{ backgroundColor: "lightgrey" }} /> */}
+            <FormControl sx={{ padding: 1 }}>
+              <Typography>Password</Typography>
+              <TextField
+                type={showPassword ? "text" : "password"}
                 value={password}
                 size="small"
                 placeholder="Your password here.."
-                onChange={(e)=>setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 sx={{
-                  backgroundColor:'#f0f0f0',
-                  my:1,
-                  border:'1px solid black',
-                 boxShadow:'4px 2px 0px 0px black'
+                  backgroundColor: "#fff",
+                  my: 1,
+                  border: "1px solid black",
+                  boxShadow: "4px 2px 0px 0px black",
                 }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
-                        aria-label={showPassword ? "hide the password" : "display the password"}
+                        aria-label={
+                          showPassword
+                            ? "hide the password"
+                            : "display the password"
+                        }
                         onClick={handleClickShowPassword}
                         onMouseDown={handleMouseDownPassword}
                         edge="end"
@@ -115,10 +127,72 @@ export default function Home() {
                     </InputAdornment>
                   ),
                 }}
-                
-                />
-              </FormControl>
-            </Card>
+              />
+            </FormControl>
+            <Grid container gap={1} mt={2}>
+              <Button
+              onClick={handleLogin}
+                variant="contained"
+                sx={{
+                  backgroundColor: "#fff",
+                  my: 1,
+                  border: "1px solid black",
+                  boxShadow: "3px 2px 0px 0px black",
+                  color: "black",
+                  width: "30%",
+                }}
+              >
+                Sign In
+              </Button>
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: "#fff",
+                  my: 1,
+                  border: "1px solid black",
+                  boxShadow: "3px 2px 0px 0px black",
+                  color: "black",
+                  width: "68%",
+                }}
+              >
+                Don't Have an account?
+              </Button>
+            </Grid>
+
+            <Grid container gap={1} mt={2} alignItems={"center"}>
+              <Typography>Or Sign Up with?</Typography>
+              <Tooltip title=" google?">
+                <Button
+                  variant="text"
+                  sx={{
+                    backgroundColor: "transparent",
+                    //  my: 1,
+                    //  border: "1px solid black",
+                    //  boxShadow: "3px 2px 0px 0px black",
+                    //  color:'black',
+                    //  width:'20%'
+                  }}
+                >
+                  <Image src={googleIcon} alt="google" width={40} height={40} />
+                </Button>
+              </Tooltip>
+
+              <Tooltip title="github?">
+                <Button
+                  variant="text"
+                  sx={{
+                    backgroundColor: "transparent",
+                    //  my: 1,
+                    //  border: "1px solid black",
+                    //  boxShadow: "3px 2px 0px 0px black",
+                    //  color:'black',
+                    //  width:'20%'
+                  }}
+                >
+                  <Image src={github} alt="github" width={40} height={40} />
+                </Button>
+              </Tooltip>
+            </Grid>
           </Box>
         </Card>
         <Card sx={{ width: "50%" }}>

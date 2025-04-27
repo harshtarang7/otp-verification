@@ -49,7 +49,7 @@ export class LoginService {
       });
       if (!isUserExist) throw new Error("no user found with this email");
 
-      const isPasswordValid = await isUserExist.validatePassword(dto.password);
+      const isPasswordValid = await isUserExist.validatePassword(dto.password);     
       if (!isPasswordValid) throw new Error("Invalid password");
 
       const token = generateToken(isUserExist)
