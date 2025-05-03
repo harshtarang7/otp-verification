@@ -34,21 +34,13 @@ export class OtpController {
 
   async verifyOtp(req: Request, res: Response): Promise<void> {
     try {
-      const { email, password, otp } = req.body;
-
-      if (!email ) {
-        res.status(400).json(ErrorResponse('email is required'));
-      }
-      
-      if (!password) {
-        res.status(400).json(ErrorResponse('password is required'));
-      }
+      const { userId, otp } = req.body;
 
       if (!otp) {
         res.status(400).json(ErrorResponse('otp is required'));
       }
 
-      const isVerified = await this.otpService.verifyOtp(email, password, otp);
+      const isVerified = await this.otpService.verifyOtp(userId, otp);
 
       if (isVerified.status) {
         res.status(200).json(SuccessResponse('OTP verified successfully'));

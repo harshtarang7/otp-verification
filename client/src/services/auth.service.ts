@@ -13,3 +13,10 @@ export async function signUp(userData: {name:string, email: string; password: st
   });
   return response.data;
 }
+
+export async function getOtp(userData: { email: string; password: string }) {
+  const response = await axios.post('http://localhost:3001/otp/send-otp', userData, {
+    withCredentials: true, 
+  });
+  return response.data;
+}

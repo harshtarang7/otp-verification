@@ -101,12 +101,11 @@ export class OtpService {
   }
 
   async verifyOtp(
-    email: string,
-    password: string,
+    userId:number,
     otpToVerify: number
   ): Promise<ApiResponse<boolean>> {
     try {
-      const user = await this.userRepository.findOne({ where: { email } });
+      const user = await this.userRepository.findOne({ where: { id:userId } });
 
       if (!user) {
         throw new Error("User not found");
@@ -114,12 +113,6 @@ export class OtpService {
 
       if(user.verified===true){
         throw new Error("User is already verified")
-      }
-
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-
-      if (!isPasswordValid) {
-        throw new Error("Invalid Password");
       }
 
       const otpRecord = await this.otpRepository.findOne({
