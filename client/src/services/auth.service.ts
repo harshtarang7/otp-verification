@@ -20,3 +20,10 @@ export async function getOtp(userData: { email: string; password: string }) {
   });
   return response.data;
 }
+
+export async function verifyOtp(userData: { userId:number,otp:number }) {
+  const response = await axios.post('http://localhost:3001/otp/verify-otp', userData, {
+    withCredentials: true, 
+  });
+  return response.data;
+}

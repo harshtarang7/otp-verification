@@ -12,17 +12,17 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, } from "react";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Image from "next/image";
-import googleIcon from "../../asset/googleIcon.png";
-import github from "../../asset/github.png";
-import { getOtp, login, signUp } from "@/services/auth.service";
-import { Bounce, toast, ToastContainer } from "react-toastify";
-import { useParams, useRouter } from "next/navigation";
+import googleIcon from "../asset/googleIcon.png";
+import github from "../asset/github.png";
+import { login } from "@/services/auth.service";
+import {Bounce, toast, ToastContainer} from "react-toastify"
+import { useRouter } from "next/navigation";
 
-export default function GetOtp() {
+export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,22 +38,24 @@ export default function GetOtp() {
     event.preventDefault();
   };
 
-  const handleGetOtp = async () => {
+  const handleLogin = async () => {
     try {
-      const res = await getOtp({ email, password });
-      if (res) {
-        toast.success("otp sent successfully");
-       
+      const res = await login({ email, password });
+      if(res){
+        toast.success('login successfull')
+        setTimeout(()=>{
+          router.push('/get-otp')
+        },700)
       }
-      setTimeout(()=>{
-        router.push('/login/otp-verify')
-      },700)
      
     } catch (error) {
       console.log(error);
     }
   };
 
+  const handleSignUpClick= ()=>{
+    router.push('/sign-up')
+  }
   return (
     <Grid
       sx={{
@@ -63,8 +65,8 @@ export default function GetOtp() {
     >
       <Card
         sx={{
-          width: "40%",
-          height: "46%",
+          width: "60%",
+          height: "65%",
           top: "50%",
           left: "50%",
           position: "relative",
@@ -75,11 +77,17 @@ export default function GetOtp() {
           boxShadow: "8px 6px 0px 0px black",
         }}
       >
-        <Card sx={{ width: "100%", background: "rgb(255, 231, 182)" }}>
+        <Card sx={{ width: "50%", background: "rgb(255, 231, 182)" }}>
           <Box padding={2} display={"flex"} flexDirection={"column"}>
-            <Typography textAlign={"center"} fontSize={20} fontWeight={700}>
-              GET OTP 
+            <Typography
+              py={1}
+              textAlign={"center"}
+              fontSize={21}
+              fontWeight={700}
+            >
+              OTPEEEE
             </Typography>
+            <Typography textAlign={"center"}>Login</Typography>
 
             <FormControl sx={{ padding: 1 }}>
               <Typography>Email</Typography>
@@ -133,30 +141,85 @@ export default function GetOtp() {
                 }}
               />
             </FormControl>
+            <Grid container gap={1} mt={2}>
+              <Button
+                onClick={handleLogin}
+                variant="contained"
+                sx={{
+                  backgroundColor: "#fff",
+                  my: 1,
+                  border: "1px solid black",
+                  boxShadow: "3px 2px 0px 0px black",
+                  color: "black",
+                  width: "30%",
+                }}
+              >
+                Sign In
+              </Button>
+              <Button
+              onClick={handleSignUpClick}
+                variant="contained"
+                sx={{
+                  backgroundColor: "#fff",
+                  my: 1,
+                  border: "1px solid black",
+                  boxShadow: "3px 2px 0px 0px black",
+                  color: "black",
+                  width: "68%",
+                }}
+              >
+                Don't Have an account?
+              </Button>
+            </Grid>
 
-          
-          
-              <Grid size={{ lg: 12, sm: 12, md: 6 }}>
+            <Grid container gap={1} mt={2} alignItems={"center"}>
+              <Typography>Or Sign Up with?</Typography>
+              <Tooltip title=" google?">
                 <Button
-                  onClick={handleGetOtp}
-                  variant="contained"
+                  variant="text"
                   sx={{
-                    backgroundColor: "#fff",
-                    p:1,
-                    my: 1,
-                    border: "1px solid black",
-                    boxShadow: "3px 2px 0px 0px black",
-                    color: "black",
-                    width: "40%",
+                    backgroundColor: "transparent",
+                    //  my: 1,
+                    //  border: "1px solid black",
+                    //  boxShadow: "3px 2px 0px 0px black",
+                    //  color:'black',
+                    //  width:'20%'
                   }}
                 >
-                  Get OTP
+                  <Image src={googleIcon} alt="google" width={40} height={40} />
                 </Button>
+              </Tooltip>
+
+              <Tooltip title="github?">
+                <Button
+                  variant="text"
+                  sx={{
+                    backgroundColor: "transparent",
+                    //  my: 1,
+                    //  border: "1px solid black",
+                    //  boxShadow: "3px 2px 0px 0px black",
+                    //  color:'black',
+                    //  width:'20%'
+                  }}
+                >
+                  <Image src={github} alt="github" width={40} height={40} />
+                </Button>
+              </Tooltip>
             </Grid>
           </Box>
         </Card>
+        <Card sx={{ width: "50%" }}>
+          <img
+            src={
+              "https://media1.tenor.com/m/Y1ITRsobhQ4AAAAC/lets-go-penguin.gif"
+            }
+            alt="sign up please"
+            width={"100%"}
+            height={"100%"}
+          />
+        </Card>
       </Card>
-      <ToastContainer
+      <ToastContainer 
         position="top-center"
         autoClose={5000}
         hideProgressBar={false}
