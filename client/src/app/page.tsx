@@ -20,9 +20,10 @@ import googleIcon from "../asset/googleIcon.png";
 import github from "../asset/github.png";
 import { login } from "@/services/auth.service";
 import {Bounce, toast, ToastContainer} from "react-toastify"
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  const [name, setName] = useState("");
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -47,6 +48,10 @@ export default function Home() {
       console.log(error);
     }
   };
+
+  const handleSignUpClick= ()=>{
+    router.push('/sign-up')
+  }
   return (
     <Grid
       sx={{
@@ -148,6 +153,7 @@ export default function Home() {
                 Sign In
               </Button>
               <Button
+              onClick={handleSignUpClick}
                 variant="contained"
                 sx={{
                   backgroundColor: "#fff",

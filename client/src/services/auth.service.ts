@@ -6,3 +6,10 @@ export async function login(userData: { email: string; password: string }) {
   });
   return response.data;
 }
+
+export async function signUp(userData: {name:string, email: string; password: string ,dob:string}) {
+  const response = await axios.post('http://localhost:3001/auth/signup', userData, {
+    withCredentials: true, 
+  });
+  return response.data;
+}
