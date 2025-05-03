@@ -45,10 +45,7 @@ export class UserEntity{
     }
 
     async validatePassword(password:string):Promise<boolean>{
-        console.log("Inside validatePassword - Input:", password);
-        console.log("Inside validatePassword - Stored:", this.password);
         const result = await bcrypt.compare(password, this.password);
-        console.log("Inside validatePassword - Result:", result);
         return result;
     }
 }

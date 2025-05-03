@@ -16,9 +16,10 @@ import { useState } from "react";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Image from "next/image";
-import googleIcon from "../../asset/googleIcon.png";
-import github from "../../asset/github.png";
+import googleIcon from "../asset/googleIcon.png";
+import github from "../asset/github.png";
 import { login } from "@/services/auth.service";
+import {Bounce, toast, ToastContainer} from "react-toastify"
 
 export default function Home() {
   const [name, setName] = useState("");
@@ -36,14 +37,16 @@ export default function Home() {
     event.preventDefault();
   };
 
-  const handleLogin =async () =>{
+  const handleLogin = async () => {
     try {
-      const res = await login({email,password})
-      console.log('res',res)
+      const res = await login({ email, password });
+      if(res){
+        toast.success('login successfull')
+      }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
   return (
     <Grid
       sx={{
@@ -131,7 +134,7 @@ export default function Home() {
             </FormControl>
             <Grid container gap={1} mt={2}>
               <Button
-              onClick={handleLogin}
+                onClick={handleLogin}
                 variant="contained"
                 sx={{
                   backgroundColor: "#fff",
@@ -206,6 +209,19 @@ export default function Home() {
           />
         </Card>
       </Card>
+      <ToastContainer 
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Bounce}
+      />
     </Grid>
   );
 }
