@@ -46,13 +46,14 @@ export default function SignUp() {
       if (res) {
         toast.success("sign up successfull");
       }
-      setTimeout(()=>{
-        router.push('/login')
-      },700)
     } catch (error) {
       console.log(error);
     }
   };
+
+  const handleLogin = ()=>{
+    router.push('/login')
+  }
 
   return (
     <Grid
@@ -64,7 +65,7 @@ export default function SignUp() {
       <Card
         sx={{
           width: "40%",
-          height: "75%",
+          height: "85%",
           top: "50%",
           left: "50%",
           position: "relative",
@@ -182,7 +183,7 @@ export default function SignUp() {
               justifyContent={"space-between"}
               alignItems={"center"}
             >
-              <Grid size={{ lg: 4, sm: 12, md: 6 }}>
+              <Grid size={{ lg: 6, sm: 12, md: 6 }}>
                 <Button
                   onClick={handleSignUp}
                   variant="contained"
@@ -198,12 +199,25 @@ export default function SignUp() {
                   Sign up
                 </Button>
               </Grid>
-              <Grid size={{ lg: 7, sm: 12, md: 7 }}>
-                <Grid container gap={1} mt={2} alignItems={'flex-start'}>
-                  <Grid size={{ lg: 3 }}>
+              <Grid size={{lg:6,sm:12,md:6}}>
+                <Button  
+                onClick={handleLogin}
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#fff",
+                    my: 1,
+                    border: "1px solid black",
+                    boxShadow: "3px 2px 0px 0px black",
+                    color: "black",
+                    width: "100%",
+                  }}>Have an Account?</Button>
+              </Grid>
+              <Grid size={{ lg: 10, sm: 12, md: 12 }}>
+                <Grid container  mt={2} alignItems={'center'} justifyContent={'center'}>
+                  <Grid size={{ lg: 2 }}>
                     <Typography>Or with?</Typography>
                   </Grid>
-                  <Grid size={{ lg: 8 }}>
+                  <Grid size={{ lg: 9 }}>
                     <Tooltip title=" google?">
                       <Button
                         variant="text"

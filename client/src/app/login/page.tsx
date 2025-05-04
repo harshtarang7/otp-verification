@@ -16,8 +16,8 @@ import { useState, } from "react";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Image from "next/image";
-import googleIcon from "../asset/googleIcon.png";
-import github from "../asset/github.png";
+import googleIcon from "../../asset/googleIcon.png";
+import github from "../../asset/github.png";
 import { login } from "@/services/auth.service";
 import {Bounce, toast, ToastContainer} from "react-toastify"
 import { useRouter } from "next/navigation";
@@ -54,7 +54,7 @@ export default function Login() {
   };
 
   const handleSignUpClick= ()=>{
-    router.push('/sign-up')
+    router.push('/')
   }
   return (
     <Grid
