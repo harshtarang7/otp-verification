@@ -12,14 +12,14 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { useState, } from "react";
+import { useState } from "react";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Image from "next/image";
 import googleIcon from "../../asset/googleIcon.png";
 import github from "../../asset/github.png";
 import { login } from "@/services/auth.service";
-import {Bounce, toast, ToastContainer} from "react-toastify"
+import { Bounce, toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
@@ -41,21 +41,29 @@ export default function Login() {
   const handleLogin = async () => {
     try {
       const res = await login({ email, password });
-      if(res){
-        toast.success('login successfull')
-        setTimeout(()=>{
-          router.push('/get-otp')
-        },700)
+      console.log(res);
+      if (res) {
+        toast.success("login successfull");
+
+        const searchParams = new URLSearchParams({
+          id:   res.data.user?.id,
+          email: res.data.user?.email,
+          name: res.data.user?.name,
+        });
+        setTimeout(() => {
+          router.push(
+            `/login/get-otp?${searchParams.toString()}`
+          );
+        }, 700);
       }
-     
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleSignUpClick= ()=>{
-    router.push('/')
-  }
+  const handleSignUpClick = () => {
+    router.push("/");
+  };
   return (
     <Grid
       sx={{
@@ -66,7 +74,7 @@ export default function Login() {
       <Card
         sx={{
           width: "60%",
-          height: "65%",
+          minHeight: "65%",
           top: "50%",
           left: "50%",
           position: "relative",
@@ -77,7 +85,13 @@ export default function Login() {
           boxShadow: "8px 6px 0px 0px black",
         }}
       >
-        <Card sx={{ width: "50%", background: "rgb(255, 231, 182)" }}>
+        <Card
+          sx={{
+            width: "50%",
+            background: "rgb(255, 231, 182)",
+            overflow: "auto",
+          }}
+        >
           <Box padding={2} display={"flex"} flexDirection={"column"}>
             <Typography
               py={1}
@@ -157,7 +171,7 @@ export default function Login() {
                 Sign In
               </Button>
               <Button
-              onClick={handleSignUpClick}
+                onClick={handleSignUpClick}
                 variant="contained"
                 sx={{
                   backgroundColor: "#fff",
@@ -219,7 +233,7 @@ export default function Login() {
           />
         </Card>
       </Card>
-      <ToastContainer 
+      <ToastContainer
         position="top-center"
         autoClose={5000}
         hideProgressBar={false}

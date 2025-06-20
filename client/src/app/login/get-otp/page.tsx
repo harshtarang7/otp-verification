@@ -20,11 +20,18 @@ import googleIcon from "../../asset/googleIcon.png";
 import github from "../../asset/github.png";
 import { getOtp, login, signUp } from "@/services/auth.service";
 import { Bounce, toast, ToastContainer } from "react-toastify";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 
 export default function GetOtp() {
-  const router = useRouter();
-  const [email, setEmail] = useState("");
+  const {id} = useParams();
+   const searchParams = useSearchParams();
+  const router = useRouter()
+  const emailfromParam = searchParams.get('email');
+  const idfromParam = searchParams.get('id');
+  const userId = Number(idfromParam)
+  const email = String(emailfromParam)
+  console.log(typeof userId)
+  // const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
@@ -46,7 +53,7 @@ export default function GetOtp() {
        
       }
       setTimeout(()=>{
-        router.push('/login/otp-verify')
+        router.push(`/login/get-otp/${userId}/otp-verify`)
       },700)
      
     } catch (error) {
@@ -85,10 +92,10 @@ export default function GetOtp() {
               <Typography>Email</Typography>
               <TextField
                 type="email"
-                value={email}
+                value={emailfromParam}
                 size="small"
                 placeholder="Your email here.."
-                onChange={(e) => setEmail(e.target.value)}
+                // onChange={(e) => setEmail(e.target.value)}
                 sx={{
                   backgroundColor: "#fff",
                   my: 1,

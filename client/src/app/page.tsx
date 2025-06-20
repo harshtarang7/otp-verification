@@ -65,7 +65,7 @@ export default function SignUp() {
       <Card
         sx={{
           width: "40%",
-          height: "85%",
+          minHeight: "85%",
           top: "50%",
           left: "50%",
           position: "relative",
@@ -74,9 +74,10 @@ export default function SignUp() {
           display: "flex",
           border: "2px solid black",
           boxShadow: "8px 6px 0px 0px black",
+         
         }}
       >
-        <Card sx={{ width: "100%", background: "rgb(255, 231, 182)" }}>
+        <Card sx={{ width: "100%", background: "rgb(255, 231, 182)", overflow:'auto' }}>
           <Box padding={2} display={"flex"} flexDirection={"column"}>
             {/* <Typography
               py={1}

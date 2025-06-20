@@ -104,6 +104,7 @@ export class OtpService {
     userId:number,
     otpToVerify: number
   ): Promise<ApiResponse<boolean>> {
+    console.log(otpToVerify,userId)
     try {
       const user = await this.userRepository.findOne({ where: { id:userId } });
 
@@ -141,6 +142,7 @@ export class OtpService {
 
       return SuccessResponse(true,'OTP verified') 
     } catch (error) {
+      console.log(error)
       throw error
     }
   }

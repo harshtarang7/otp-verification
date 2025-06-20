@@ -1,21 +1,17 @@
 "use client";
-import {
-  Box,
-  Button,
-  Card,
-  Grid,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Card, Grid, TextField, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { Bounce, toast, ToastContainer } from "react-toastify";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { verifyOtp } from "@/services/auth.service";
 
 export default function VerifyOTP() {
-  const { id } = useParams();
-  const userId = Number(id);
-  console.log(id)
+  const searchParams = useSearchParams();
+  console.log('search',searchParams)
+  const userId = searchParams.get("id");
+  const emailfromParam = searchParams.get('email');
+  const convertedUserId = Number(userId)
+  console.log(emailfromParam);
   const router = useRouter();
   const [otpDigits, setOtpDigits] = useState(["", "", "", "", "", ""]);
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
@@ -39,14 +35,14 @@ export default function VerifyOTP() {
   };
 
   const handleVerify = async () => {
-    const otp = Number(otpDigits.join(""));
-    if (otp.toString().length !== 6) {
-      toast.error("Please enter a valid 6-digit OTP");
-      return;
-    }
+    const otpString = otpDigits.join("");
+    const otpNumber = Number(otpString);
+    console.log(userId);
 
     try {
-      const res = await verifyOtp({ userId, otp });
+      let res = await verifyOtp({ userId:convertedUserId, otp: otpNumber });
+      console.log(res);
+
       if (res) {
         toast.success("OTP Verified Successfully");
         setTimeout(() => {
@@ -152,4 +148,3 @@ export default function VerifyOTP() {
     </Grid>
   );
 }
-
